@@ -9,6 +9,8 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 function CommonForm({
   formControls,
@@ -18,27 +20,54 @@ function CommonForm({
   buttonText,
   isBtnDisabled,
 }) {
+  const [showPassword, setShowPassword] = useState({});
   function renderInputsByComponentType(getControlItem) {
     let element = null;
     const value = formData[getControlItem.name] || "";
 
     switch (getControlItem.componentType) {
       case "input":
+        const isPasswordField = getControlItem.type === "password";
+        const inputType = isPasswordField && showPassword[getControlItem.name] 
+          ? "text" 
+          : getControlItem.type;
+        
         element = (
-          <Input 
-            name={getControlItem.name}
-            placeholder={getControlItem.placeholder}
-            id={getControlItem.name}
-            type={getControlItem.type}
-            value={value}
-            onChange={(event) =>
-              setFormData({
-                ...formData,
-                [getControlItem.name]: event.target.value,
-              })
-            }
-            className="custom-input"
-          />
+          <div className="relative w-full">
+            <Input 
+              name={getControlItem.name}
+              placeholder={getControlItem.placeholder}
+              id={getControlItem.name}
+              type={inputType}
+              value={value}
+              onChange={(event) =>
+                setFormData({
+                  ...formData,
+                  [getControlItem.name]: event.target.value,
+                })
+              }
+              className={`custom-input ${isPasswordField ? 'pr-12' : ''}`}
+              style={{ paddingRight: isPasswordField ? '3rem' : '1rem' }}
+            />
+            {isPasswordField && (
+              <button
+                type="button"
+                className="absolute inset-y-0 right-0 flex items-center justify-center w-12 h-full cursor-pointer z-10 hover:bg-gray-100 rounded-r-lg transition-colors"
+                onClick={() => setShowPassword(prev => ({
+                  ...prev,
+                  [getControlItem.name]: !prev[getControlItem.name]
+                }))}
+                tabIndex={-1}
+                style={{ right: '120px', top: '1px', bottom: '1px', opacity:'50%', background: 'white', color: 'gray', height : '40px' }}
+              >
+                {showPassword[getControlItem.name] ? (
+                  <EyeOff className="h-5 w-5 text-gray-600 hover:text-gray-800 transition-colors" />
+                ) : (
+                  <Eye className="h-5 w-5 text-gray-600 hover:text-gray-800 transition-colors opacity-50 " />
+                )}
+              </button>
+            )}
+          </div>
         );
 
         break;

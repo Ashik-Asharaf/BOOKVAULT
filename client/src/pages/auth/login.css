@@ -9,6 +9,7 @@
   width: 100%;
   box-sizing: border-box;
   margin-left: 102px;
+  position: relative;
 }
 .custom-input:focus {
   border-color: #4338ca;
