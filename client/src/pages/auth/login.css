@@ -1,0 +1,67 @@
+.custom-input {
+  border: 2px solid #6366f1;
+  background: #f3f4f6;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  color: #22223b;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  max-width: 350px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-left: 102px;
+}
+.custom-input:focus {
+  border-color: #4338ca;
+  outline: none;
+  box-shadow: 0 0 0 2px #a5b4fc;
+  
+}
+
+/* Add more styles as needed for hover, disabled, etc. */
+
+label, .mb-1 {
+  margin-left: 102px;
+  margin-top : 5px;
+  margin-bottom : 5px;
+}
+
+
+.login-wrapper {
+  position: fixed;
+  top: 70%;
+  right: 8%; /* Adjust this value for how far from the right edge you want */
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-height: 100vh;
+  z-index: 10;
+  
+
+  
+}
+
+.custom-btn {
+  max-width: 350px;
+  width: 100%;
+  margin: 2rem auto 0 auto;
+  display: block;
+  background: linear-gradient(90deg, #6366f1 0%, #4338ca 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(67, 56, 202, 0.07);
+  margin-left: 102px;
+}
+.custom-btn:hover, .custom-btn:focus {
+  background: linear-gradient(90deg, #4338ca 0%, #6366f1 100%);
+  box-shadow: 0 4px 16px rgba(67, 56, 202, 0.13);
+}
+.custom-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
