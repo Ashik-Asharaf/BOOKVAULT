@@ -4,6 +4,7 @@ import { Link,useNavigate } from "react-router-dom";
 import { registerFormControls } from "@/config";
 import { useDispatch } from "react-redux";
 import { registerUser } from "@/store/auth-slice";
+import { toast } from "sonner";
 //import { useNavigate } from "react-router-dom";
 
 const initialState = {
@@ -17,31 +18,35 @@ function AuthRegister() {
     const [formData, setFormData] = useState(initialState);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
   function onSubmit(event){
-    console.log('Form submitted!', event);
     event.preventDefault();
-    console.log('Form data being sent:', formData);
     
     // Check if all required fields are filled
-    if (!formData.username || !formData.email || !formData.password) {
-      console.error('Missing required fields:', formData);
-      alert('Please fill in all required fields');
+    if (!formData.username ) {
+      toast.error('Please fill in Username field');
+      return;
+    }
+    if (!formData.email) {
+      toast.error('Please fill in Email field');
+      return;
+    }
+    if ( !formData.password) {
+      toast.error('Please fill in Password field');
       return;
     }
     
-    console.log('Dispatching registerUser...');
     dispatch(registerUser(formData)).then((data)=>{
       console.log('Registration response:', data);
       if (data?.payload?.success) {
-        console.log('Registration successful, navigating to login');
-        navigate('/auth/login');
+        toast.success('Registration successful!');
+        navigate('/auth/login', { state: { email: formData.email } });
       } else {
-        console.error('Registration failed:', data?.payload?.message);
-        alert(data?.payload?.message || 'Registration failed');
+        toast.error(data?.payload?.message || 'Registration failed');
       }
     }).catch((error) => {
       console.error('Registration error:', error);
-      alert('Registration failed. Please try again.');
+      toast.error('Registration failed. Please try again.');
     });
   }
 
