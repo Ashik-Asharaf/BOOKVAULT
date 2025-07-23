@@ -52,13 +52,13 @@ function CommonForm({
             {isPasswordField && (
               <button
                 type="button"
-                className="absolute inset-y-0 right-0 flex items-center justify-center w-12 h-full cursor-pointer z-10 hover:bg-gray-100 rounded-r-lg transition-colors"
+                className="absolute inset-y-0 right-0 flex items-center justify-center w-12 h-full cursor-pointer z-10 hover:bg-gray-100 rounded-r-lg transition-colors mr-50px"
                 onClick={() => setShowPassword(prev => ({
                   ...prev,
                   [getControlItem.name]: !prev[getControlItem.name]
                 }))}
                 tabIndex={-1}
-                style={{ right: '120px', top: '1px', bottom: '1px', opacity:'50%', background: 'white', color: 'gray', height : '40px' }}
+                style={{ left: '440px', top: '3px', bottom: '1px', opacity:'70%', background: 'transparent', border: 'none', outline: 'none', color: 'gray', height: '40px' }}
               >
                 {showPassword[getControlItem.name] ? (
                   <EyeOff className="h-5 w-5 text-gray-600 hover:text-gray-800 transition-colors" />

@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const authRoutes = require('./routes/auth/auth-route');
+const authRouter = require('./routes/auth/auth-route');
 
 
 //create a db fn
@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
     cors({
-        origin: "http://localhost:5173",
+        origin: ["http://localhost:5173", "http://localhost:5174"], // allow both ports
         methods: ["GET", "POST", "PUT", "DELETE"],
         allowedHeaders: ["Content-Type", 
             "Authorization",
@@ -31,6 +31,6 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRouter);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

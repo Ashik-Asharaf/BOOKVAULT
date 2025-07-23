@@ -1,8 +1,10 @@
 import CommonForm from "@/components/common/form";
 import "./login.css";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginFormControls } from "@/config";
+import { useDispatch } from "react-redux";
+import { loginUser } from "@/store/auth-slice";
 
 const initialState = {
     email: '',  
@@ -12,12 +14,21 @@ const initialState = {
 function AuthLogin() {
 
     const [formData, setFormData] = useState(initialState);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  function onSubmit(){}
+  function onSubmit(event){
+    event.preventDefault();
+    dispatch(loginUser(formData)).then((data)=>{
+      console.log(data);
+      if (data?.payload?.success) {
+        navigate('/shop/home');
+      }
+    });
+  }
 
   return (
-    <div className="login-wrapper">
-      <div className="mx-auto w-full max-w-md space-y-6">
+    <div className="mx-auto w-full max-w-md space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Sign In to your account</h1>
           <p className="mt-2">Don't have an account
@@ -31,7 +42,6 @@ function AuthLogin() {
           setFormData={setFormData}
           onSubmit={onSubmit}
         />
-      </div>
     </div>
   );
 }
