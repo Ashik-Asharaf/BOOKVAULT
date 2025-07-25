@@ -10,7 +10,8 @@ import { toast } from "sonner";
 const initialState = {
     username: '',
     email: '',  
-    password: ''
+    password: '',
+    confirmPassword: ''
 }
 
 function AuthRegister() {
@@ -36,13 +37,37 @@ function AuthRegister() {
       return;
     }
     
-    dispatch(registerUser(formData)).then((data)=>{
+    // Password validation
+    if (formData.password.length < 5 || formData.password.length > 12) {
+      toast.error('Password must be 5-12 characters long');
+      return;
+    }
+    
+    const hasNumberOrSpecial = /[0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(formData.password);
+    if (!hasNumberOrSpecial) {
+      toast.error('Password must contain at least one number or special symbol');
+      return;
+    }
+    if (!formData.confirmPassword) {
+      toast.error('Please confirm your password');
+      return;
+    }
+    if (formData.password !== formData.confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+    
+    // Remove confirmPassword from data sent to server
+    const { confirmPassword, ...registrationData } = formData;
+    
+    dispatch(registerUser(registrationData)).then((data)=>{
       console.log('Registration response:', data);
       if (data?.payload?.success) {
         toast.success('Registration successful!');
         navigate('/auth/login', { state: { email: formData.email } });
-      } else {
-        toast.error(data?.payload?.message || 'Registration failed');
+      } 
+      else {
+        toast.error(data?.payload?.message || 'Registration failed!. Username/email already exists');
       }
     }).catch((error) => {
       console.error('Registration error:', error);

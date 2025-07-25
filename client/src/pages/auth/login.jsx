@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginFormControls } from "@/config";
 import { useDispatch } from "react-redux";
 import { loginUser } from "@/store/auth-slice";
+import { toast } from "sonner";
 
 const initialState = {
     email: '',  
@@ -19,11 +20,18 @@ function AuthLogin() {
 
   function onSubmit(event){
     event.preventDefault();
+
     dispatch(loginUser(formData)).then((data)=>{
       console.log(data);
       if (data?.payload?.success) {
+        toast.success(data?.payload?.message || 'Login successful!');
         navigate('/shop/home');
+      } else {
+        toast.error(data?.payload?.message || 'Login failed. Please try again.');
       }
+    }).catch((error) => {
+      console.error('Login error:', error);
+      toast.error('Login failed. Please try again.');
     });
   }
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import AuthLayout from "./components/auth/layout";
 import AuthLogin from "./pages/auth/login";
@@ -24,8 +25,9 @@ import UnauthPage from "./pages/unauth-page";
 function App() {
   const [count, setCount] = useState(0);
 
-  const isAuthenticated = false;
-  const user = null // Replace with actual user data if available
+ // Replace with actual user data if available
+
+  const {isAuthenticated, user} = useSelector((state) => state.auth);
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
