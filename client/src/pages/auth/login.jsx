@@ -28,6 +28,7 @@ function AuthLogin() {
         navigate('/shop/home');
       } else {
         toast.error(data?.payload?.message || 'Login failed. Please try again.');
+        
       }
     }).catch((error) => {
       console.error('Login error:', error);

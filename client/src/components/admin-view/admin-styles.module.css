@@ -1,0 +1,239 @@
+/* Admin Header Styles */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
+  height: 4rem;
+  width: 100%;
+}
+
+.toggleButton {
+  display: none;
+
+}
+
+.logoutButton {
+  margin-left: auto ;
+  color: black;
+  background-color: #cf3333;
+  margin-left: 750px;
+  border: black;
+  
+}
+
+/* Admin Sidebar Styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap');
+
+:root {
+  --sidebar-bg: #ecf1fa;
+  --sidebar-text: #000308;
+  --sidebar-hover: #334155;
+  --sidebar-active: #00050d;
+  --sidebar-icon: #000308;
+  --sidebar-width: 240px;
+  --sidebar-padding: 1.5rem;
+  --sidebar-transition: all 0.3s ease-in-out;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  height: 100vh;
+  padding: var(--sidebar-padding);
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  transition: var(--sidebar-transition);
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar Header */
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: var(--sidebar-transition);
+  color:black;
+  margin-bottom: 15px;
+}
+
+.sidebarHeader:hover {
+  background-color: #334155;
+
+}
+
+.sidebarHeader:hover .sidebarTitle {
+  -webkit-text-fill-color: white !important;
+  color: white !important;
+  text-shadow: none;
+}
+
+.sidebarHeader:hover .sidebarIcon {
+  color: white !important;
+}
+
+.sidebarHeader svg {
+  color: var(--sidebar-icon);
+  transition: var(--sidebar-transition);
+}
+
+.sidebarHeader:hover svg {
+  color: var(--sidebar-active);
+  transform: scale(1.05);
+}
+
+/* Menu Items */
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin: 0.25rem 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: var(--sidebar-transition);
+  color: var(--sidebar-text);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.menuItem:hover {
+  background-color: var(--sidebar-hover);
+  color: white;
+  transform: translateX(4px);
+}
+
+.menuItem.active {
+  background-color: var(--sidebar-active);
+  color: white;
+  font-weight: 600;
+}
+
+.menuItem svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--sidebar-icon);
+  transition: var(--sidebar-transition);
+}
+
+.menuItem:hover svg,
+.menuItem.active svg {
+  color: white;
+  transform: scale(1.1);
+}
+
+.sidebarTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #000000, #2c3e50);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.navMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.menuIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.menuLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Animation for menu items */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.menuItem {
+  animation: slideIn 0.3s ease-out forwards;
+  opacity: 0;
+}
+
+/* Add delay for each menu item */
+.menuItem:nth-child(1) { animation-delay: 0.1s; }
+.menuItem:nth-child(2) { animation-delay: 0.2s; }
+.menuItem:nth-child(3) { animation-delay: 0.3s; }
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .toggleButton {
+    display: block;
+  }
+  
+  .sidebar {
+    transform: translateX(-100%);
+    width: 280px;
+  }
+  
+  .sidebarOpen {
+    transform: translateX(0);
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .menuItem {
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+/* Layout Styles */
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 16rem;
+  padding: 1.5rem;
+  transition: margin 0.3s ease-in-out;
+}
+
+@media (max-width: 1024px) {
+  .mainContent {
+    margin-left: 0;
+  }
+}
+
+

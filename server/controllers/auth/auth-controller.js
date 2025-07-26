@@ -1,4 +1,3 @@
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
@@ -66,32 +65,61 @@ const loginUser= async (req, res) => {
             email : checkUser.email
         },'CLIENT_SECRET_KEY',{expiresIn : '60mins'})
 
-
-        res.cookie('token',token,{httpOnly : true, secure : false }).json({
-            success : true,
-            message : "Logged in successfully",
-            user : {
-                email : checkUser.email,
-                role : checkUser.role,
-                id : checkUser._id
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: false, // Set to true in production
+            sameSite: 'lax',
+            maxAge: 60 * 60 * 1000 // 60 minutes
+        }).json({
+            success: true,
+            message: "Logged in successfully",
+            user: {
+                email: checkUser.email,
+                role: checkUser.role,
+                id: checkUser._id
             }
         })
 
-    }catch(e){
-        console.log(e);
+    } catch (error) {
+        console.error('Login error:', error);
         res.status(500).json({
             success: false,
-            message: 'Some Error Occured'});
+            message: 'Some error occurred'
+        });
     }
 
 }
 //logout
 
-
+const logoutUser =  (req, res) => {
+    res.clearCookie('token').json({
+        success : true,
+        message : "Logged out successfully"
+    })
+}
 
 //auth middleware
 
+const authMiddleware = (req, res, next) => {
+    const token = req.cookies.token;
+    if(!token)
+        return res.status(401).json({
+            success : false,
+            message : "Unauthorized user!"
+        })
+        try{
+            const decodedData = jwt.verify(token,'CLIENT_SECRET_KEY');
+            req.user = decodedData;
+            next();
+        }catch(e){
+            return res.status(401).json({
+                success : false,
+                message : "Unauthorized user!"
+            })
+        }
+    }
+
+    
 
 
-
-module.exports = {registerUser, loginUser};   
+module.exports = {registerUser, loginUser,logoutUser, authMiddleware};   

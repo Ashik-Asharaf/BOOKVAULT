@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 import AuthLayout from "./components/auth/layout";
 import AuthLogin from "./pages/auth/login";
@@ -21,17 +24,26 @@ import ShoppingAccount from "./pages/shopping-view/account";
 
 import CheckAuth from "./components/common/check-auth";
 import UnauthPage from "./pages/unauth-page";
+import { checkAuth } from "./store/auth-slice";
 
 function App() {
   const [count, setCount] = useState(0);
 
  // Replace with actual user data if available
 
-  const {isAuthenticated, user} = useSelector((state) => state.auth);
+  const {isAuthenticated, user, isLoading} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if(isLoading) return <Skeleton className="h-full bg-black w-full " />
+    
+  console.log(isLoading,user)
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
-      Header components
       <Routes>
         <Route
           path="/auth"
