@@ -7,11 +7,21 @@ import styles from "./admin-styles.module.css";
 function AdminLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
     <div className={styles.layout}>
-      <AdminSideBar isOpen={isSidebarOpen} />
+      <AdminSideBar 
+        isOpen={isSidebarOpen} 
+        onOpenChange={setIsSidebarOpen} 
+      />
       <div className={styles.mainContent}>
-        <AdminHeader setOpen={setIsSidebarOpen} />
+        <AdminHeader 
+          isOpen={isSidebarOpen}
+          onToggle={toggleSidebar} 
+        />
         <main className="p-4 md:p-6">
           <Outlet />
         </main>

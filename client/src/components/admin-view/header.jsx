@@ -4,7 +4,7 @@ import styles from "./admin-styles.module.css";
 // import { useDispatch } from "react-redux";
 // import { logoutUser } from "@/store/auth-slice";
 
-function AdminHeader({ setOpen }) {
+function AdminHeader({ isOpen, onToggle }) {
 //   const dispatch = useDispatch();
 
 //   function handleLogout() {
@@ -13,15 +13,19 @@ function AdminHeader({ setOpen }) {
 
   return (
     <header className={styles.header}>
-      <Button 
-        onClick={() => setOpen(true)} 
-        className={styles.toggleButton}
-        variant="ghost"
-        size="icon"
-      >
-        <AlignJustify className="h-5 w-5" />
-        <span className="sr-only">Toggle Menu</span>
-      </Button>
+      {!isOpen && (
+        <Button 
+          onClick={onToggle} 
+          className={styles.toggleButton}
+          variant="ghost"
+          size="icon"
+          aria-label="Toggle menu"
+          aria-expanded={isOpen}
+        >
+          <AlignJustify className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
+        </Button>
+      )}
       <div className={styles.headerActions}>
         <Button 
           
