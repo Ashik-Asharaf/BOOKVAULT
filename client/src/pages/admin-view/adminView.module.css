@@ -1,0 +1,82 @@
+.addButton {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  margin-right: 25px;
+  margin-top: 102px;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.tableContainer {
+    margin-top: 102px;
+    width: 100%;
+    color: #000;
+}
+
+:global([data-side='right'][data-state='open']) {
+    animation: slideIn 0.3s ease-out;
+}
+
+:global([data-side='right'][data-state='closed']) {
+    animation: slideOut 0.3s ease-in;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
+:global(.sheet-overlay) {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+:global([data-state='open'] .sheet-content) {
+    right: 0;
+    left: auto;
+    top: 0;
+    height: 100%;
+    transform: translateX(0);
+}
+
+/* Style the close button */
+:global([data-state='open'] .sheet-close) {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    left: auto;
+    margin: 0;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    z-index: 50;
+    background-color: transparent;
+    border: none;
+}
+
+:global([data-state='open'] .sheet-close:hover) {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+:global([data-state='open'] .sheet-close:focus) {
+    outline: 2px solid rgba(0, 0, 0, 0.1);
+    outline-offset: 2px;
+}
+
+:global([data-state='open'] .sheet-close svg) {
+    width: 1rem;
+    height: 1rem;
+}
