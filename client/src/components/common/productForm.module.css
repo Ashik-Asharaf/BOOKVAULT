@@ -24,7 +24,10 @@
   font-size: 0.875rem;
 }
 
-.formInput,
+.formInput{
+  width: 100%;
+  margin-left: -35px;
+}
 .formTextarea,
 .formSelect {
   width: 100%;

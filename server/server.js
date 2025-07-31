@@ -4,13 +4,27 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const authRouter = require('./routes/auth/auth-route');
 
+// MongoDB connection
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(
 
-//create a db fn
+// "mongodb+srv://ashikasharaf2120:Ashik_2120@cluster1.ilpxdiw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1",
+"mongodb+srv://ashikasharaf2120:Ashik%402120@cluster0.4opg4ml.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+{
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            }
+        );
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.error('MongoDB Connection Error:', error.message);
+        process.exit(1); // Exit process with failure
+    }
+};
 
-mongoose.connect(
-    "mongodb+srv://ashikasharaf2120:Ashik%402120@cluster0.4opg4ml.mongodb.net/"
-).then(() => console.log("Connected to MongoDB")).catch((error) => console.log(error));
-
+// Connect to MongoDB
+connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

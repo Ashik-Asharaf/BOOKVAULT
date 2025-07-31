@@ -46,12 +46,37 @@
   color: white;
 }
 
-.logoutButton {
-  margin-right: 25px;
-  margin-top: 42px;
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   position: fixed;
-  right: 0;
-  top: 0;
+  right: 1.5rem;
+  top: 1rem;
+  z-index: 50;
+}
+
+.headerActions .addButton {
+  display: flex !important;
+  align-items: center !important;
+  background-color: #2563eb !important; /* Blue-600 */
+  color: white !important;
+  border: 1px solid #1d4ed8 !important; /* Blue-700 */
+  padding: 0.5rem 1rem !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.headerActions .addButton:hover {
+  background-color: #1d4ed8 !important; /* Darker blue on hover */
+  border-color: #1e40af !important; /* Even darker blue for border on hover */
+  color: white !important;
+}
+
+.logoutButton {
+  display: flex;
+  align-items: center;
   color: white;
   background-color: #050505;
   border: 1px solid #000000;
@@ -191,7 +216,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-fill-color: transparent;
+  /* text-fill-color: transparent; */
   transition: all 0.3s ease;
 }
 

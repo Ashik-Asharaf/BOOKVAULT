@@ -1,10 +1,12 @@
-import { AlignJustify, LogOut } from "lucide-react";
+import { AlignJustify, LogOut, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import styles from "./admin-styles.module.css";
+import { useNavigate } from "react-router-dom";
 // import { useDispatch } from "react-redux";
 // import { logoutUser } from "@/store/auth-slice";
 
 function AdminHeader({ isOpen, onToggle }) {
+  const navigate = useNavigate();
 //   const dispatch = useDispatch();
 
 //   function handleLogout() {
@@ -28,11 +30,18 @@ function AdminHeader({ isOpen, onToggle }) {
       )}
       <div className={styles.headerActions}>
         <Button 
-          
+          size="sm"
+          className={styles.addButton}
+          onClick={() => navigate("/admin/products/add")}
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          <span>Add Product</span>
+        </Button>
+        <Button 
           className={styles.logoutButton}
           // onClick={handleLogout}
         >
-          <LogOut className="h-4 w-4" />
+          <LogOut className="h-4 w-4 mr-1" />
           <span>Logout</span>
         </Button>
       </div>
