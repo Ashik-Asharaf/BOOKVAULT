@@ -1,4 +1,4 @@
-2:34 min
+3:50:50 min
 
 ADMIN : admin1@mail.com  pass: Admin1
 
@@ -6,3 +6,8 @@ USER1 : user01@gmail.com  pass: user1
 
 
 mongodb : ldcorps2120   pass : ldcorps2120
+
+cloudinary :
+    cloud_name : 'dlmvlddlu',
+    api_key : '737119693632743',
+    api_secret : 'PFMF-oPOGDnr5Z3ARi24XM6-6ek'
