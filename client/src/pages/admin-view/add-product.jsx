@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { addProductFormElements } from "@/config";
 import ImageUpload from "@/components/ui/image-upload";
 import formStyles from "./productForm.module.css";
+import { useDispatch,useSelector } from "react-redux";
+import {addNewProduct, fetchAllProducts} from "@/store/admin/products-slice"
+import { useToaster } from "react-hot-toast";
+
 
 const initialFormData = {
   image: null,
@@ -18,8 +22,42 @@ const initialFormData = {
 
 function AddProduct() {
   const navigate = useNavigate();
+  const [openCreateProductsDialog,setOpenCreateProductsDialog] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [imageLoadingState, setImageLoadingState] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { productList} = useSelector((state)=>state.adminProducts)
+  const dispatch = useDispatch()
+  const toast = useToaster()
+
+
+  function onSubmit(event){
+    event.preventDefault();
+    dispatch(addNewProduct({
+      ...formData,
+      image : uploadedImageUrl
+    })).then((data)=>{
+        console.log(data);
+        if((data?.payload?.success)){
+          dispatch(fetchAllProducts())
+          setOpenCreateProductsDialog(false)
+          setImageFile(null);
+          setFormData(initialFormData);
+            toast({
+              title : 'Product Added Successfully'
+            })
+        }
+    })
+    
+  }
+
+  useEffect(()=>{
+    dispatch(fetchAllProducts())
+  },[dispatch])
+
+  console.log(productList,'productList')
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -40,6 +78,10 @@ function AddProduct() {
             <ImageUpload 
               value={imageFile}
               onChange={setImageFile}
+              uploadedImageUrl={uploadedImageUrl}
+              setUploadedImageUrl={setUploadedImageUrl}
+              imageLoadingState={imageLoadingState}
+              setImageLoadingState={setImageLoadingState}
               className="w-full"
             />
           </div>
@@ -85,7 +127,7 @@ function AddProduct() {
                   >
                     <option value="">Select {controlItem.label}</option>
                     {controlItem.options?.map(option => (
-                      <option key={option.value} value={option.value}>
+                      <option key={option.id} value={option.id}>
                         {option.label}
                       </option>
                     ))}

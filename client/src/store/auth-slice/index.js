@@ -26,7 +26,7 @@ export const loginUser = createAsyncThunk('auth/login',
 })
 
 export const checkAuth = createAsyncThunk('auth/checkAuth',
-    async()=>{
+    async(_, { rejectWithValue }) => {
         try {
             const response = await axios.get('http://localhost:5000/api/auth/checkAuth', {
                 withCredentials: true,
@@ -37,6 +37,10 @@ export const checkAuth = createAsyncThunk('auth/checkAuth',
             });
             return response.data;
         } catch (error) {
+            if (error.response && error.response.status === 401) {
+                // Unauthorized, return a custom value
+                return rejectWithValue({ success: false, user: null });
+            }
             console.error('Error checking auth:', error);
             throw error;
         }
