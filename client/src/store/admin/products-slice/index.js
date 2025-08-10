@@ -1,5 +1,5 @@
-import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from 'axios';
 
 const initialState = {
     isLoading : false,
@@ -7,22 +7,40 @@ const initialState = {
    
 }
 
-export const addNewProduct = createAsyncThunk('/products/addnewproduct',
-    async (formData)=>{
-            const response = await axios.post('http://localhost:5000/api/admin/add-products/add',formData,{
-               headers : {
-                    'Content-Type' : 'application/json'
-               }
-            })
-            return result?.data;
-        }
-    );
+const API_BASE_URL = 'http://localhost:5000/api/admin/products';
 
-export const fetchAllProducts = createAsyncThunk('/products/fetchAllProducts',
-            async (formData)=>{
-                    const response = await axios.get('http://localhost:5000/api/admin/add-products/get',
-                )}
-            );
+export const addNewProduct = createAsyncThunk('products/addNewProduct',
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(API_BASE_URL + '/add', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Add Product Error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to add product');
+    }
+  }
+);
+
+export const fetchAllProducts = createAsyncThunk('products/fetchAllProducts',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(API_BASE_URL + '/get', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Fetch Products Error:', error.response?.data || error.message);
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch products');
+    }
+  }
+);
 
 export const editProduct = createAsyncThunk(
     '/products/editProduct',

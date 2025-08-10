@@ -6,8 +6,7 @@ import ImageUpload from "@/components/ui/image-upload";
 import formStyles from "./productForm.module.css";
 import { useDispatch,useSelector } from "react-redux";
 import {addNewProduct, fetchAllProducts} from "@/store/admin/products-slice"
-import { useToaster } from "react-hot-toast";
-
+import toast from "react-hot-toast";
 
 const initialFormData = {
   image: null,
@@ -30,39 +29,76 @@ function AddProduct() {
   const [isLoading, setIsLoading] = useState(false);
   const { productList} = useSelector((state)=>state.adminProducts)
   const dispatch = useDispatch()
-  const toast = useToaster()
 
 
-  function onSubmit(event){
-    event.preventDefault();
-    dispatch(addNewProduct({
-      ...formData,
-      image : uploadedImageUrl
-    })).then((data)=>{
-        console.log(data);
-        if((data?.payload?.success)){
-          dispatch(fetchAllProducts())
-          setOpenCreateProductsDialog(false)
-          setImageFile(null);
-          setFormData(initialFormData);
-            toast({
-              title : 'Product Added Successfully'
-            })
-        }
-    })
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
     
-  }
+    try {
+      // First upload the image to Cloudinary if a new image is selected
+      let imageUrl = uploadedImageUrl;
+      
+      if (imageFile && !uploadedImageUrl) {
+        setImageLoadingState(true);
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        // Make sure to replace these with your actual Cloudinary credentials
+        formData.append('upload_preset', 'bookvault'); // Your Cloudinary upload preset
+        formData.append('cloud_name', 'dquhriqz3'); // Your Cloudinary cloud name
+        
+        const cloudinaryResponse = await fetch('https://api.cloudinary.com/v1_1/dquhriqz3/image/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        const cloudinaryData = await cloudinaryResponse.json();
+        imageUrl = cloudinaryData.secure_url;
+        setUploadedImageUrl(imageUrl);
+        setImageLoadingState(false);
+      }
+      
+      // Prepare product data
+      const productData = {
+        ...formData,
+        price: Number(formData.price),
+        salePrice: formData.salePrice ? Number(formData.salePrice) : 0,
+        totalStock: Number(formData.totalStock),
+        image: imageUrl
+      };
+      
+      // Save product to database
+      const result = await dispatch(addNewProduct(productData)).unwrap();
+      
+      if (result?.success) {
+        dispatch(fetchAllProducts());
+        setFormData(initialFormData);
+        setImageFile(null);
+        setUploadedImageUrl('');
+        
+        toast.success('Product added successfully', {
+          duration: 3000,
+        });
+        
+        // Optionally navigate back to products list
+        navigate('/admin/products');
+      }
+    } catch (error) {
+      console.error('Error adding product:', error);
+      toast.error(error.message || 'Failed to add product', {
+        duration: 5000,
+      });
+    } finally {
+      setIsLoading(false);
+      setImageLoadingState(false);
+    }
+  };
 
   useEffect(()=>{
     dispatch(fetchAllProducts())
   },[dispatch])
 
   console.log(productList,'productList')
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', { ...formData, image: imageFile });
-  };
 
   return (
     <div className="container mx-auto p-4 max-w-4xl">
@@ -72,7 +108,7 @@ function AddProduct() {
       </div>
 
       <div className={formStyles.formContainer}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={onSubmit}>
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-4">Product Image</h3>
             <ImageUpload 
@@ -137,8 +173,12 @@ function AddProduct() {
             ))}
             
             <div className={formStyles.formGroup} style={{ gridColumn: '1 / -1' }}>
-              <button type="submit" className={formStyles.submitButton}>
-                Add Product
+              <button 
+                type="submit" 
+                className={`${formStyles.submitButton} ${(isLoading || imageLoadingState) ? 'opacity-70 cursor-not-allowed' : ''}`}
+                disabled={isLoading || imageLoadingState}
+              >
+                {isLoading || imageLoadingState ? 'Processing...' : 'Add Product'}
               </button>
             </div>
           </div>
