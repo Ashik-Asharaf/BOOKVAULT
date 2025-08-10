@@ -8,6 +8,8 @@ function AdminProducts() {
     const dispatch = useDispatch();
     const { productList: products, isLoading: loading, error } = useSelector((state) => state.adminProducts);
 
+
+
     useEffect(() => {
         dispatch(fetchAllProducts());
     }, [dispatch]);
@@ -21,9 +23,12 @@ function AdminProducts() {
             
             <div className="bg-white rounded-lg shadow p-6">
                 {products && products.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         {products.map((product) => (
-                            <AdminProductTile key={product._id} product={product} />
+                            <AdminProductTile 
+                                key={product._id} 
+                                product={product} 
+                            />
                         ))}
                     </div>
                 ) : (

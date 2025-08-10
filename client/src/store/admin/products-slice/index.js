@@ -43,17 +43,26 @@ export const fetchAllProducts = createAsyncThunk('products/fetchAllProducts',
 );
 
 export const editProduct = createAsyncThunk(
-    '/products/editProduct',
-                    async (id,formData)=>{
-                            const response = await axios.put(`http://localhost:5000/api/admin/add-products/edit/${id}`,
-                                formData,{
-                               headers : {
-                                    'Content-Type' : 'application/json'
-                               }
-                            })
-                            return result?.data;
-                        }
-                    );
+    'products/editProduct',
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.put(
+                `${API_BASE_URL}/edit/${id}`,
+                data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error('Edit Product Error:', error.response?.data || error.message);
+            return rejectWithValue(error.response?.data?.message || 'Failed to update product');
+        }
+    }
+);
 export const deleteProduct = createAsyncThunk('/products/deleteProduct',
             async (id)=>{
             const response = await axios.delete(`http://localhost:5000/api/admin/add-products/delete/${id}`         
@@ -62,8 +71,12 @@ export const deleteProduct = createAsyncThunk('/products/deleteProduct',
 
 const AdminProductsSlice = createSlice({
     name : 'adminProductsSlice',
-    initialState ,
-    reducers : {},
+    initialState,
+    reducers: {
+        setFormData: (state, action) => {
+            state.formData = action.payload;
+        }
+    },
     extraReducers : (builder)=>{
         builder.addCase(fetchAllProducts.pending,(state)=>{
             state.isLoading = true;
@@ -78,4 +91,5 @@ const AdminProductsSlice = createSlice({
 })
     
 
-export default AdminProductsSlice.reducer
+export const { setFormData } = AdminProductsSlice.actions;
+export default AdminProductsSlice.reducer;
