@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { deleteProduct } from '@/store/admin/products-slice';
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
+import { toast } from 'sonner';
 
 function AdminProductTile({ product }) {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     
     const handleEditClick = () => {
-        // Navigate to the add product page with the product ID as a URL parameter
         navigate(`/admin/products/add?edit=${product._id}`);
     };
+
+    const handleDeleteClick = async () => {
+        if (window.confirm(`Are you sure you want to delete "${product?.title}"? This action cannot be undone.`)) {
+            try {
+                setIsDeleting(true);
+                await dispatch(deleteProduct(product._id)).unwrap();
+                toast.success('Product deleted successfully');
+            } catch (error) {
+                console.error('Failed to delete product:', error);
+                toast.error(error || 'Failed to delete product');
+            } finally {
+                setIsDeleting(false);
+            }
+        }
+    };
     return (
-        <Card className="w-full max-w-sm mx-auto overflow-hidden hover:shadow-lg transition-shadow duration-300">
+        <Card className=" w-full max-w-sm mx-auto overflow-hidden border-1 border-white ml-10  hover:shadow-lg transition-shadow duration-300">
             <div className="flex flex-col h-full">
                 {/* Image Section */}
                 <div className="relative bg-gray-100 h-[250px] flex items-center justify-center">
@@ -52,8 +72,12 @@ function AdminProductTile({ product }) {
                             <Button onClick={handleEditClick}>
                                 Edit
                             </Button>
-                            <Button variant="destructive">
-                                Delete
+                            <Button 
+                                variant="destructive" 
+                                onClick={handleDeleteClick}
+                                disabled={isDeleting}
+                            >
+                                {isDeleting ? 'Deleting...' : 'Delete'}
                             </Button>
                         </div>
                     </CardFooter>
@@ -61,7 +85,6 @@ function AdminProductTile({ product }) {
             </div>
         </Card>
     );
-    
 }
 
 export default AdminProductTile;

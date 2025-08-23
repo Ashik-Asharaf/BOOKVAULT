@@ -2,16 +2,24 @@ import { AlignJustify, LogOut, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 import styles from "./admin-styles.module.css";
 import { useNavigate } from "react-router-dom";
-// import { useDispatch } from "react-redux";
-// import { logoutUser } from "@/store/auth-slice";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "@/store/auth-slice";
+import { toast } from 'sonner';
 
 function AdminHeader({ isOpen, onToggle }) {
   const navigate = useNavigate();
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-//   function handleLogout() {
-//     dispatch(logoutUser());
-//   }
+  async function handleLogout() {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      toast.success('Logged out successfully');
+      navigate('/auth/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      toast.error('Failed to log out');
+    }
+  }
 
   return (
     <header className={styles.header}>
@@ -39,7 +47,7 @@ function AdminHeader({ isOpen, onToggle }) {
         </Button>
         <Button 
           className={styles.logoutButton}
-          // onClick={handleLogout}
+           onClick={handleLogout}
         >
           <LogOut className="h-4 w-4 mr-1" />
           <span>Logout</span>

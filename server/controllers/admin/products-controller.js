@@ -79,8 +79,34 @@ const fetchAllProducts = async(req,res)=>{
     }
 }
 
-//edit product
+// Get single product
+const getProductById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        
+        if (!product) {
+            return res.status(404).json({
+                success: false,
+                message: 'Product not found'
+            });
+        }
+        
+        res.status(200).json({
+            success: true,
+            data: product
+        });
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching product',
+            error: error.message
+        });
+    }
+};
 
+// Edit product
 const editProduct = async(req,res)=>{
     try {
         const {id} = req.params;
@@ -132,9 +158,9 @@ res.status(200).json({
 
 const deleteProduct = async(req,res)=>{
     try {
-
         const {id} = req.params;
-        const product = await Product.findByIdAndUpdate(id);
+        const product = await Product.findByIdAndDelete(id);
+        
         if(!product){
             return res.status(404).json({
                 success : false,
@@ -142,14 +168,11 @@ const deleteProduct = async(req,res)=>{
             });
         }
 
-       // await //product.remove();
-
         res.status(200).json({
             success : true,
             message : 'Product deleted successfully',
             data : product
         });
-
     }
     catch(e)      
         {
@@ -161,4 +184,4 @@ const deleteProduct = async(req,res)=>{
     }
 }
 
-module.exports= {handleImageUpload,addProduct,fetchAllProducts,editProduct,deleteProduct}
+module.exports= {handleImageUpload, addProduct, fetchAllProducts, getProductById, editProduct, deleteProduct}

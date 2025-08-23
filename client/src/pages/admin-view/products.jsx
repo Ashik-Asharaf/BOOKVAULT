@@ -23,7 +23,7 @@ function AdminProducts() {
             
             <div className="bg-white rounded-lg shadow p-6">
                 {products && products.length > 0 ? (
-                    <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-19 px-15">
                         {products.map((product) => (
                             <AdminProductTile 
                                 key={product._id} 
